@@ -1,0 +1,12 @@
+post_install() {
+    post_upgrade
+}
+
+post_upgrade() {
+    cp /etc/piri-base/NetworkManager.conf /etc/NetworkManager/NetworkManager.conf
+    cp /etc/piri-base/pdnsd.conf /etc/pdnsd.conf
+    cp /etc/piri-base/resolv.conf /etc/resolv.conf
+    systemctl enable --now NetworkManager
+    systemctl enable --now NetworkManager-dispatcher
+    systemctl enable --now pdnsd
+}
