@@ -2,6 +2,7 @@
 !/*
 */*
 !*PKGBUILD
-!*.install
-!*.conf
-!*.sh
+!system-config/*.install
+!system-config/*.conf
+!system-config/*.sh
+!system-config/*.sudoers
