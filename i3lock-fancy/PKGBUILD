@@ -1,0 +1,28 @@
+# Maintainer: Your Name <youremail@domain.com>
+_pkgname=i3lock-fancy
+pkgname="${_pkgname}-git"
+pkgver=r121.50e9748
+pkgrel=1
+pkgdesc="A lock screen using i3lock with multi monitor support"
+arch=(any)
+url="https://github.com/fpiribauer/i3-fancylock"
+license=('MIT')
+depends=('i3lock' 'imagemagick')
+source=('git+https://github.com/fpiribauer/i3lock-fancy')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${_pkgname}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  echo "Nothing to build"
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}"
+  install -Dm755 lock "${pkgdir}/usr/bin/lock"
+  install -d "${pkgdir}/usr/share/${_pkgname}"
+  cp -a lockscreens "${pkgdir}/usr/share/${_pkgname}"
+}

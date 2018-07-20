@@ -1,0 +1,136 @@
+# Maintainer: Fabian Piribauer <misc@piribauer.online>
+# Contributor: Michael Daffin <michael@daffin.io>
+pkgbase='piri'
+pkgname=(piri-base piri-desktop piri-dell-xps-15 piri-devel)
+pkgver=10
+pkgrel=1
+pkgdesc="System config for piri systems"
+arch=(x86_64)
+url="https://github.com/fpiribauer/system-config"
+license=(custom)
+groups=(piri)
+
+source=(
+    piri-base.sudoers 
+    piri-base.profile.sh
+    piri-base.NetworkManager.conf
+    piri-base.pdnsd.conf
+    piri-base.resolv.conf
+    piri-base.10-pdnsd-retest.sh
+    piri-dell-xps-15.10-monitor.conf
+)
+
+# The sources all live in this repo and so are version controlled and checked
+# summed through git. There is not much point in adding these extra checksums
+# here especially when they have to be changed for every update to them.
+sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP SKIP)
+
+package_piri-base() {
+    provides=(vi)
+    conflicts=(vi)
+    install=piri-base.install
+
+    # Base group
+    depends=(bash bzip2 coreutils cryptsetup device-mapper dhcpcd diffutils
+    e2fsprogs file filesystem findutils gawk gcc-libs gettext glibc grep gzip
+    inetutils iproute2 iputils less licenses linux logrotate man-db man-pages
+    mdadm pacman pciutils pcmciautils perl procps-ng psmisc s-nail sed shadow
+    sysfsutils systemd-sysvcompat tar texinfo usbutils util-linux which)
+
+    depends=(bash bzip2 coreutils cryptsetup device-mapper dhcpcd diffutils
+             e2fsprogs file filesystem findutils gawk gcc-libs gettext glibc 
+	     grep gzip inetutils iproute2 iputils less licenses linux 
+	     logrotate man-db man-pages pacman pciutils perl 
+	     procps-ng psmisc sed shadow sysfsutils systemd-sysvcompat 
+	     tar texinfo usbutils util-linux which)
+    # Explicitly removed from the base group: jfsutils lvm2 mdadm nano netctl reiserfsprogs s-nail xfsprogs 
+
+    # Extra general packages
+    depends+=(sudo bash-completion p7zip pass)
+    install -dm 0755 "${pkgidr}/etc/profile.d"
+    install -Dm 0755 piri-base.profile.sh "${pkgdir}/etc/profile.d/piri-base.sh"
+
+    install -dm 0750 "${pkgdir}/etc/sudoers.d"
+    install -Dm 0640 piri-base.sudoers "${pkgdir}/etc/sudoers.d/10-piri-base"
+
+    # Networking
+    depends+=(networkmanager pdnsd openssh)
+
+    # The actual install hapens on piri-base.install
+    install -Dm 0644 piri-base.NetworkManager.conf "${pkgdir}/etc/piri-base/NetworkManager.conf"
+    install -Dm 0644 piri-base.pdnsd.conf "${pkgdir}/etc/piri-base/pdnsd.conf"
+    install -Dm 0644 piri-base.resolv.conf "${pkgdir}/etc/piri-base/resolv.conf"
+
+    # For retesting pdnsd after NM connects to a network
+    install -Dm 0755 piri-base.10-pdnsd-retest.sh "${pkgdir}/etc/NetworkManager/dispatcher.d/10-pdnsd-retest-piri-base.sh"
+
+    # Editor
+    depends+=(vim vim-ctrlp vim-surround vim-gruvbox-git)
+    install -dm 0755 "${pkgdir}/usr/bin"
+    ln -s /usr/bin/vim "${pkgdir}/usr/bin/vi"
+    
+    # Fonts
+    depends+=(ttf-dejavu)
+
+}
+
+package_piri-desktop() {
+    depends=(piri-base)
+
+    # i3 Desktop
+    depends+=(i3-gaps dmenu compton polybar-git ttf-font-awesome-4)
+
+    # Applications
+    depends+=(termite firefox-nightly ffmpeg evince)
+
+    # Utility
+    depends+=(i3lock-fancy redshift nitrogen pulseaudio pavucontrol)
+
+    # Fonts
+    depends+=(adobe-source-han-sans-otc-fonts)
+
+    # Xorg base packages
+    depends+=(xorg-server xorg-xinit)
+    # xorg-apps packages and utilities
+    depends+=(xorg-bdftopcf xorg-iceauth xorg-luit xorg-mkfontdir 
+              xorg-mkfontscale xorg-sessreg xorg-setxkbmap xorg-smproxy
+	      xorg-x11perf xorg-xauth xorg-xbacklight xorg-xcmsdb 
+	      xorg-xcursorgen xorg-xdpyinfo xorg-xdriinfo xorg-xev 
+	      xorg-xgamma xorg-xhost xorg-xinput xorg-xkbcomp 
+	      xorg-xkbevd xorg-xkbutils xorg-xkill xorg-xlsatoms 
+	      xorg-xlsclients xorg-xmodmap xorg-xpr xorg-xprop 
+	      xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot 
+	      xorg-xvinfo xorg-xwd xorg-xwininfo xorg-xwud)
+}
+
+package_piri-dell-xps-15() {
+    install=piri-dell-xps-15.install
+    depends=(piri-desktop)
+
+    # Firmware
+    depends+=(intel-ucode)
+    # Graphic driver
+    depends+=(xf86-video-intel mesa lib32-mesa)
+    depends+=(nvidia nvidia-utils lib32-nvidia-utils)
+
+    # Multi Monitor Config
+    install -Dm 0644 piri-dell-xps-15.10-monitor.conf "${pkgdir}/etc/X11/xorg.conf.d/10-monitor-piri-dell-xps-15.conf"
+
+    # Bumblebee for hybrid graphics
+    depends+=(bbswitch bumblebee) 
+
+    # Touchpad
+    depends+=(libinput)
+}
+
+package_piri-devel() {
+    depends=(piri-base)
+
+    # base-devel Group
+    depends+=(autoconf automake binutils bison fakeroot file findutils flex
+    gawk gcc gettext grep groff gzip libtool m4 make pacman patch pkgconf
+    sed sudo systemd texinfo util-linux which)
+
+    # General tools
+    depends+=(git cmake)
+}
