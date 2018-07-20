@@ -7,9 +7,10 @@ pkgdesc="A lock screen using i3lock with multi monitor support"
 arch=(any)
 url="https://github.com/fpiribauer/i3-fancylock"
 license=('MIT')
-depends=('i3lock' 'imagemagick')
-source=('git+https://github.com/fpiribauer/i3lock-fancy')
-sha256sums=('SKIP')
+depends=("i3lock" "imagemagick")
+provides=("i3lock-fancy")
+source=("git+https://github.com/fpiribauer/i3lock-fancy")
+sha256sums=("SKIP")
 
 pkgver() {
   cd "${_pkgname}"
