@@ -1,6 +1,6 @@
 # Maintainer: Your Name <youremail@domain.com>
 _pkgname=i3lock-fancy
-pkgname="${_pkgname}-git"
+pkgname="${_pkgname}-piri-git"
 pkgver=r121.50e9748
 pkgrel=1
 pkgdesc="A lock screen using i3lock with multi monitor support"

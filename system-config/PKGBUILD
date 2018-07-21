@@ -2,7 +2,7 @@
 # Contributor: Michael Daffin <michael@daffin.io>
 pkgbase='piri'
 pkgname=(piri-base piri-desktop piri-dell-xps-15 piri-devel)
-pkgver=10
+pkgver=11
 pkgrel=1
 pkgdesc="System config for piri systems"
 arch=(x86_64)
@@ -84,7 +84,7 @@ package_piri-desktop() {
     depends+=(termite firefox-nightly ffmpeg evince)
 
     # Utility
-    depends+=(i3lock-fancy redshift nitrogen pulseaudio pavucontrol)
+    depends+=(i3lock-fancy-piri-git redshift nitrogen pulseaudio pavucontrol)
 
     # Fonts
     depends+=(adobe-source-han-sans-otc-fonts)
