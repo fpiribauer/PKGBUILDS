@@ -32,12 +32,6 @@ package_piri-base() {
 
     # Base group
     depends=(bash bzip2 coreutils cryptsetup device-mapper dhcpcd diffutils
-    e2fsprogs file filesystem findutils gawk gcc-libs gettext glibc grep gzip
-    inetutils iproute2 iputils less licenses linux logrotate man-db man-pages
-    mdadm pacman pciutils pcmciautils perl procps-ng psmisc s-nail sed shadow
-    sysfsutils systemd-sysvcompat tar texinfo usbutils util-linux which)
-
-    depends=(bash bzip2 coreutils cryptsetup device-mapper dhcpcd diffutils
              e2fsprogs file filesystem findutils gawk gcc-libs gettext glibc 
 	     grep gzip inetutils iproute2 iputils less licenses linux 
 	     logrotate man-db man-pages pacman pciutils perl 

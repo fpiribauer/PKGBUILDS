@@ -6,3 +6,5 @@
 !system-config/*.conf
 !system-config/*.sh
 !system-config/*.sudoers
+!firefox-nightly/*.desktop
+!firefox-nightly/*.js
