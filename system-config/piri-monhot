@@ -1,0 +1,15 @@
+#!/bin/bash
+#export DISPLAY=:0.0
+#export XAUTHORITY="/home/piri/.Xauthority"
+ 
+function connect(){
+    xrandr --output HDMI1 --auto --left-of eDP1
+    $XDG_CONFIG_HOME/polybar/run_polybar.sh
+}
+  
+function disconnect(){
+    xrandr --output HDMI1 --off
+    $XDG_CONFIG_HOME/polybar/run_polybar.sh
+}
+   
+xrandr | grep "HDMI1 connected" && connect || disconnect
