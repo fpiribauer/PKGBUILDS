@@ -2,7 +2,7 @@
 # Contributor: Michael Daffin <michael@daffin.io>
 pkgbase='piri'
 pkgname=(piri-base piri-desktop piri-dell-xps-15 piri-devel)
-pkgver=12
+pkgver=13
 pkgrel=1
 pkgdesc="System config for piri systems"
 arch=(x86_64)
@@ -17,14 +17,15 @@ source=(
     piri-base.pdnsd.conf
     piri-base.resolv.conf
     piri-base.10-pdnsd-retest.sh
+    piri-desktop.override.conf
     piri-dell-xps-15.10-monitor.conf
-    piri-monhot
+    piri-dell-xps-15.monhot
 )
 
 # The sources all live in this repo and so are version controlled and checked
 # summed through git. There is not much point in adding these extra checksums
 # here especially when they have to be changed for every update to them.
-sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP SKIP SKIP SKIP)
 
 package_piri-base() {
     provides=(vi)
@@ -96,6 +97,9 @@ package_piri-desktop() {
 	      xorg-xlsclients xorg-xmodmap xorg-xpr xorg-xprop 
 	      xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot 
 	      xorg-xvinfo xorg-xwd xorg-xwininfo xorg-xwud)
+
+    # autologin
+    install -Dm 0644 piri-desktop.override.conf "${pkgdir}/etc/systemd/system/getty@tty1.service.d/override.conf"
 }
 
 package_piri-dell-xps-15() {
@@ -110,7 +114,7 @@ package_piri-dell-xps-15() {
 
     # Multi Monitor Config
     install -Dm 0644 piri-dell-xps-15.10-monitor.conf "${pkgdir}/etc/X11/xorg.conf.d/10-monitor-piri-dell-xps-15.conf"
-    install -Dm 0755 piri-monhot "${pkgdir}/usr/bin/monhot"
+    install -Dm 0755 piri-dell-xps-15.monhot "${pkgdir}/usr/bin/monhot"
 
     # Bumblebee for hybrid graphics
     depends+=(bbswitch bumblebee) 
