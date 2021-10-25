@@ -1,9 +1,9 @@
 # Maintainer: Fabian Piribauer <misc@piribauer.online>
 # Contributor: Michael Daffin <michael@daffin.io>
 pkgbase='piri'
-pkgname=(piri-base piri-desktop piri-dell-xps-15 piri-devel)
+pkgname=(piri-base piri-desktop piri-desktop-nvidia-intel piri-dell-xps-15 piri-devel)
 pkgver=14
-pkgrel=1
+pkgrel=2
 pkgdesc="System config for piri systems"
 arch=(any)
 url="https://github.com/fpiribauer/system-config"
@@ -13,12 +13,13 @@ groups=(piri)
 source=(
     piri-base.sudoers 
     piri-base.profile.sh
+    piri-desktop.autologin.conf
 )
 
 # The sources all live in this repo and so are version controlled and checked
 # summed through git. There is not much point in adding these extra checksums
 # here especially when they have to be changed for every update to them.
-sha256sums=(SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP)
 
 package_piri-base() {
     provides=(vi)
@@ -56,6 +57,7 @@ package_piri-base() {
 }
 
 package_piri-desktop() {
+    install=piri-desktop.install
     depends=(piri-base)
 
     # Plasma
@@ -70,7 +72,7 @@ package_piri-desktop() {
     # Xorg base packages
     depends+=(xorg-server xorg-xinit)
     # xorg-apps packages and utilities
-    depends+=(xorg-bdftopcf xorg-iceauth xorg-luit xorg-mkfontdir 
+    depends+=(xorg-bdftopcf xorg-iceauth luit xorg-mkfontdir 
               xorg-mkfontscale xorg-sessreg xorg-setxkbmap xorg-smproxy
 	      xorg-x11perf xorg-xauth xorg-xbacklight xorg-xcmsdb 
 	      xorg-xcursorgen xorg-xdpyinfo xorg-xdriinfo xorg-xev 
@@ -79,6 +81,8 @@ package_piri-desktop() {
 	      xorg-xlsclients xorg-xmodmap xorg-xpr xorg-xprop 
 	      xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot 
 	      xorg-xvinfo xorg-xwd xorg-xwininfo xorg-xwud)
+
+    install -Dm 0640 piri-desktop.autologin.conf "${pkgdir}/etc/sddm.conf.d/autologin.conf"
 }
 
 package_piri-desktop-nvidia-intel() {
