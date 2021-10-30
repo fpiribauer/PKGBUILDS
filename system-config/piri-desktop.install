@@ -4,5 +4,10 @@ post_install() {
 }
 
 post_upgrade() {
+    sed -i 's/^hosts: .*$/hosts: files mymachines myhostname mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns/' /etc/nsswitch.conf
+    install -Dm 0640 /etc/piri-desktop/reflector.conf /etc/xdg/reflector/reflector.conf
+    systemctl enable --now avahi-daemon
+    systemctl enable --now cups
+    systemctl enable reflector
     systemctl enable sddm
 }
