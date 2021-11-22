@@ -2,7 +2,7 @@
 # Contributor: Michael Daffin <michael@daffin.io>
 pkgbase='piri'
 pkgname=(piri-base piri-desktop piri-desktop-nvidia-intel piri-dell-xps-15 piri-devel)
-pkgver=15
+pkgver=16
 pkgrel=1
 pkgdesc="System config for piri systems"
 arch=(any)
@@ -65,7 +65,7 @@ package_piri-desktop() {
     depends+=(reflector rsync)
 
     # Plasma
-    depends+=(plasma-meta kdeconnect sshfs)
+    depends+=(plasma-meta kde-applications-meta kdeconnect sshfs)
 
     # Applications
     depends+=(alacritty firefox ffmpeg evince)
